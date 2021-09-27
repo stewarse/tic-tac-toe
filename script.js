@@ -8,7 +8,7 @@ const game = (() => {
     const renderBoard = () => {
         for(let i = 0; i < gameBoard.length; i++) {
             for(let j = 0; j < gameBoard[i].length; j++) {
-                const cell = document.getElementById(`#${i}-${j}`)
+                const cell = document.getElementById(`${i}-${j}`)
                 if (cell) {
                     cell.textContent = gameBoard[i][j]
                 }
