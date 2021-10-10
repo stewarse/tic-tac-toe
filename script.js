@@ -1,36 +1,25 @@
-const game = (() => {
-    const gameBoard = [
+const Gameboard = (() => {
+    const gameboard = [
     ['x', 'o', 'o'],
     ['o', 'x', 'o'],
     ['o', 'x', 'x']
     ];
 
     const renderBoard = () => {
-        for(let i = 0; i < gameBoard.length; i++) {
-            for(let j = 0; j < gameBoard[i].length; j++) {
+        for(let i = 0; i < gameboard.length; i++) {
+            for(let j = 0; j < gameboard[i].length; j++) {
                 const cell = document.getElementById(`${i}-${j}`)
                 if (cell) {
-                    cell.textContent = gameBoard[i][j]
+                    cell.textContent = gameboard[i][j]
                 }
             }
         }
 
     }
-
     return {renderBoard}
-
-
 })();
 
-const displayController = (() => {
-
-    const renderBoard = () => {
-
-    }
-    
-    const clearBoard = () => {
-
-    }
+const Game = (() => {
 
 })();
 
