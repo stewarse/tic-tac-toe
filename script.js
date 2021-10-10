@@ -1,28 +1,60 @@
 const Gameboard = (() => {
-    const gameboard = [
-    ['x', 'o', 'o'],
-    ['o', 'x', 'o'],
-    ['o', 'x', 'x']
-    ];
+    const gameboard = ['x', 'o', 'o', 'o', 'x', 'o', 'o', 'x', 'x'];
 
-    const renderBoard = () => {
-        for(let i = 0; i < gameboard.length; i++) {
-            for(let j = 0; j < gameboard[i].length; j++) {
-                const cell = document.getElementById(`${i}-${j}`)
-                if (cell) {
-                    cell.textContent = gameboard[i][j]
-                }
+    // const _cacheDOM =() => {
+    //     this.cell =  document.getElementById(`${i}-${j}`)
+    // }
+
+    const _render = () => {
+        gameboard.forEach((el, index) => {
+            const cell = document.getElementById(`${index}`)
+            if (cell) {
+                cell.textContent = el
             }
-        }
-
+        })
     }
-    return {renderBoard}
+
+    const addMove = () => {
+            //Check if move is valid
+            if(isMoveValid) {
+            //Add move to gameboard
+            //Render board
+
+            _render()
+            }
+    }
+
+    const isMoveValid = () => {
+        //Verify that move is a valide move
+    }
+
+    return {addMove}
+
+
+    //Reset gameboard
 })();
 
 const Game = (() => {
+ //update DOM based on gameboard? (needs access to gameboard)
+ //player clicks on gameboard
+Gameboard.addMove
 
-})();
+})(Gameboard);
 
 const Player = (name) => {
 
 }
+
+/*
+Add Marks to spot on board
+tie mark to the dom (players click on gamboard to place their marker)
+check to see if move is valid is available available
+
+Gameboard
+  
+  
+Player
+
+Game
+
+*/
