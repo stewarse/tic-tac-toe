@@ -18,13 +18,14 @@ const Gameboard = (() => {
         return document.getElementById(`${index}`)
     }
 
-    const addMove = () => {
+    const addMove = (index, player) => {
             //Check if move is valid
-            if(isMoveValid()) {
+            if(isMoveValid(index)) {
             //Add move to gameboard
-            
+                marker = player === 0 ? "O" : "X"
+                gameboard[index] = marker
             //Render board
-            _render()
+                _render()
             }
     }
 
@@ -34,14 +35,14 @@ const Gameboard = (() => {
         return gameboard[index] === "" ? true : false;
     }
 
-    return {addMove}
+    return {addMove, getGameboardIndex}
 
 
     //Reset gameboard
 })();
 
 const Game = (() => {
- //update DOM based on gameboard? (needs access to gameboard)
+ //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
 Gameboard.addMove
 
