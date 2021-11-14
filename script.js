@@ -1,5 +1,6 @@
 const Gameboard = (() => {
-    const gameboard = ['X', 'O', 'O', 'O', 'X', '', 'O', 'X', 'X'];
+
+    const gameboard = ['', '', '', '', '', '', '', '', ''];
 
     // const _cacheDOM =() => {
     //     this.cell =  document.getElementById(`${i}-${j}`)
@@ -7,20 +8,22 @@ const Gameboard = (() => {
 
     const _render = () => {
         gameboard.forEach((el, index) => {
-            const cell = getGameboardIndex(index)
+            const cell = document.getElementById(`${index}`)
             if (cell) {
                 cell.textContent = el
             }
         })
     }
 
-    const getGameboardIndex = (index) => {
-        return document.getElementById(`${index}`)
-    }
+    // const getGameboardIndex = (index) => {
+    //     console.log(document.getElementById(`${index}`))
+    //     return document.getElementById(`${index}`)
+    // }
 
-    const addMove = (index, player) => {
+    const addMove = (e, player) => {
             //Check if move is valid
-            if(isMoveValid(index)) {
+            let index = +e.target.id
+            if(isMoveValid(e, index)) {
             //Add move to gameboard
                 marker = player === 0 ? "O" : "X"
                 gameboard[index] = marker
@@ -29,22 +32,33 @@ const Gameboard = (() => {
             }
     }
 
-    const isMoveValid = (index) => {
-        //Verify that the gameboard at index is === ""
-        //Return True or False
-        return gameboard[index] === "" ? true : false;
+    const isMoveValid = (e, index) => {
+        //Verify that the click occurred on a valid cell
+        if(isBoardCellClicked(e)){
+            //Verify that the gameboard at index is === ""
+            //Return True or False
+            return gameboard[index] === "" ? true : false;
+        }
+        return false
     }
 
-    return {addMove, getGameboardIndex}
+    const isBoardCellClicked = (e) => {
+        return e.target.nodeName === "TD" ? true : false;
+    }
 
+    return {addMove}
 
     //Reset gameboard
 })();
 
 const Game = (() => {
+    const board = document.getElementById("board")
  //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
-Gameboard.addMove
+    board.addEventListener("click", Gameboard.addMove)
+
+
+    return { }
 
 })(Gameboard);
 
@@ -53,9 +67,7 @@ const Player = (name) => {
 }
 
 /*
-Add Marks to spot on board
-tie mark to the dom (players click on gamboard to place their marker)
-check to see if move is valid
+define marker based on which player is playing (alternate players each move)
 
 Gameboard
   
