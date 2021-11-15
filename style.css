@@ -12,12 +12,15 @@ table {
   border-style: hidden;
 }
 
-tr {
-  /* background-color: red; */
-}
+/* tr {
+  background-color: red;
+} */
 
 table td {
   padding: 15px 1em;
+  height: 105px;
+  width: 33.3%;
   border: 3px solid black;
+  text-align: center;
   /* background-color: aqua; */
 }
