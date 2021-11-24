@@ -82,7 +82,7 @@ const Gameboard = (() => {
 
 
 const Game = (() => {
-    let turnCount = 1
+    let turnCount = 0
 
     const board = document.getElementById("board")
  //update DOM based on gameboard? (needs access to gameboard?)
@@ -98,7 +98,7 @@ const Game = (() => {
             if (currentPlayer.checkForWinner()) {
                 _announceWinner(currentPlayer)
                 return turnCount = 9
-            } else if (!currentPlayer.checkForWinner() && turnCount === 9) {
+            } else if (!currentPlayer.checkForWinner() && turnCount === 8) {
                 _itsADraw()
             }
             turnCount += 1
