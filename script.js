@@ -7,12 +7,14 @@ const Player = (name, playerMarker) => {
 
 }
 
-const playerOne = Player('Player One', 'X')
-const playerTwo = Player('Player Two', 'O')
+const player_0 = Player('Player One', 'X')
+const player_1 = Player('Player Two', 'O')
 
 const Gameboard = (() => {
 
     const gameboard = ['', '', '', '', '', '', '', '', ''];
+
+    const winConditions = [[0, 1, 2], [3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8], [6, 4, 2]];
 
     // const _cacheDOM =() => {
     //     this.cell =  document.getElementById(`${i}-${j}`)
@@ -47,8 +49,20 @@ const Gameboard = (() => {
     const _isBoardCellClicked = (e) => {
         return e.target.nodeName === "TD" ? true : false;
     }
+    const checkWinConditions = () => {
+        winConditions.forEach((el) => {
+            if(gameboard[el[0]] === gameboard[el[1]] && gameboard[el[0]] === gameboard[el[2]]) {
+                console.log('Winner, Winner, Chicken Dinner!!')
+                return true 
+            } 
+        })
+        console.log("Draw! You're both losers!")
+        return false
+    }
 
-    return {addMoveToGameboard, isValidMove}
+
+
+    return {addMoveToGameboard, isValidMove, checkWinConditions}
 
     //Reset gameboard
 })();
@@ -72,7 +86,16 @@ const Game = (() => {
             } else {
                 playerTwo.makeMove(index)
             }
+            _hasAnyoneWon()
             turnCount += 1
+        }
+    }
+
+    const _hasAnyoneWon = () => {
+        if(Gameboard.checkWinConditions()) {
+            console.log("Winner, Winner. Chicken dinner!")
+        } else if(!Gameboard.checkWinConditions() && turnCount === 9) {
+            console.log("It's a draw!")
         }
     }
 
@@ -81,21 +104,3 @@ const Game = (() => {
     return { }
 
 })(Gameboard);
-
-
-
-
-
-
-
-/*
-define marker based on which player is playing (alternate players each move)
-
-Gameboard
-  
-  
-Player
-
-Game
-
-*/
