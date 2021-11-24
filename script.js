@@ -14,9 +14,6 @@ const Player = (name, playerMarker) => {
     return { makeMove, checkForWinner, getName }
 }
 
-const player_0 = Player('Player One', 'X')
-const player_1 = Player('Player Two', 'O')
-
 const Gameboard = (() => {
 
     const gameboard = ['', '', '', '', '', '', '', '', ''];
@@ -82,9 +79,14 @@ const Gameboard = (() => {
 
 
 const Game = (() => {
-    let turnCount = 0
+    let turnCount = 0;
+    let player_0;
+    let player_1;
 
     const board = document.getElementById("board")
+    const start = document.getElementById("start-btn")
+    const player1DOM = document.getElementById("player-1-name")
+    const player2DOM = document.getElementById("player-2-name")
  //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
 
@@ -113,8 +115,21 @@ const Game = (() => {
         console.log('Nobody wins, it\'s a Draw')
     }
 
-    board.addEventListener("click", _playerTurn) //Needs to call makeMove on the appropriate player object
+    const _createPlayers = () => {
+        player_0 = Player(player1DOM.value, 'X')
+        player_1 = Player(player2DOM.value, 'O')
+    }
+
+    board.addEventListener("click", _playerTurn) 
+    start.addEventListener("click", _createPlayers)
 
     return { }
 
 })(Gameboard);
+
+
+//[ ] : Update Start Button to restart if a game has already started
+//[ ] : Add a label to display the final result whether it ends in a win or a draw
+//[ ] : Computer AI? 
+
+
