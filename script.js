@@ -1,10 +1,17 @@
 const Player = (name, playerMarker) => {
-    const getPlayerMarker = () => playerMarker;
-    const makeMove = (index) => {
-        Gameboard.addMoveToGameboard(index, getPlayerMarker())
-    }
-    return {makeMove}
+    const _getPlayerMarker = () => playerMarker;
 
+    const getName = () => name;
+    
+    const makeMove = (index) => {
+        Gameboard.addMoveToGameboard(index, _getPlayerMarker())
+    }
+
+    const checkForWinner = () => {
+        return Gameboard.checkWinConditions(_getPlayerMarker())
+    }
+
+    return { makeMove, checkForWinner, getName }
 }
 
 const player_0 = Player('Player One', 'X')
@@ -49,15 +56,19 @@ const Gameboard = (() => {
     const _isBoardCellClicked = (e) => {
         return e.target.nodeName === "TD" ? true : false;
     }
-    const checkWinConditions = () => {
+
+    const checkWinConditions = (playerMarker) => {
+        let winner = false
         winConditions.forEach((el) => {
-            if(gameboard[el[0]] === gameboard[el[1]] && gameboard[el[0]] === gameboard[el[2]]) {
-                console.log('Winner, Winner, Chicken Dinner!!')
-                return true 
+            if  (
+                gameboard[el[0]] === playerMarker && 
+                gameboard[el[1]] === playerMarker && 
+                gameboard[el[2]] === playerMarker
+                ) {
+                return winner = true 
             } 
         })
-        console.log("Draw! You're both losers!")
-        return false
+        return winner
     }
 
 
@@ -79,24 +90,27 @@ const Game = (() => {
 
     const _playerTurn = (e) => {
         let index = +e.target.id
+        let currentPlayer = eval(`player_${turnCount % 2}`)
 
-        if (Gameboard.isValidMove(e, index)){
-            if(turnCount % 2 !== 0) {
-                playerOne.makeMove(index)
-            } else {
-                playerTwo.makeMove(index)
+        if (Gameboard.isValidMove(e, index) && turnCount < 9){
+            currentPlayer.makeMove(index)
+
+            if (currentPlayer.checkForWinner()) {
+                _announceWinner(currentPlayer)
+                return turnCount = 9
+            } else if (!currentPlayer.checkForWinner() && turnCount === 9) {
+                _itsADraw()
             }
-            _hasAnyoneWon()
             turnCount += 1
         }
     }
 
-    const _hasAnyoneWon = () => {
-        if(Gameboard.checkWinConditions()) {
-            console.log("Winner, Winner. Chicken dinner!")
-        } else if(!Gameboard.checkWinConditions() && turnCount === 9) {
-            console.log("It's a draw!")
-        }
+    const _announceWinner = (currentPlayer) => {
+        console.log(`Winner Winner, Chicken Dinner. ${currentPlayer.getName()} has won the game!`)
+    }
+
+    const _itsADraw = () => {
+        console.log('Nobody wins, it\'s a Draw')
     }
 
     board.addEventListener("click", _playerTurn) //Needs to call makeMove on the appropriate player object
