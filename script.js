@@ -87,8 +87,17 @@ const Game = (() => {
     const start = document.getElementById("start-btn")
     const player1DOM = document.getElementById("player-1-name")
     const player2DOM = document.getElementById("player-2-name")
+    const player1Label = document.getElementById("player-1-label")
+    const player2Label = document.getElementById("player-2-label")
+    const player1NameEntry = document.getElementById("player-1-name")
+    const player2NameEntry = document.getElementById("player-2-name")
  //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
+
+    // const _cacheDOM = () => {
+    //     this.player1Label = document.getElementById("player-1-label")
+    //     const player2Label = document.getElementById("player-2-label")
+    // }
 
     const _playerTurn = (e) => {
         let index = +e.target.id
@@ -118,6 +127,24 @@ const Game = (() => {
     const _createPlayers = () => {
         player_0 = Player(player1DOM.value, 'X')
         player_1 = Player(player2DOM.value, 'O')
+        _setPlayerNames()
+    }
+    
+    const _setPlayerNames = () => {
+        player1Label.textContent = player_0.getName()
+        player2Label.textContent = player_1.getName()
+        _hidePlayerEntry()
+        _displayPlayerNames()
+    }
+
+    const _hidePlayerEntry= () => {
+        player1NameEntry.hidden = true
+        player2NameEntry.hidden = true
+    }
+
+    const _displayPlayerNames = () => {
+        player1Label.hidden = false
+        player2Label.hidden = false
     }
 
     board.addEventListener("click", _playerTurn) 

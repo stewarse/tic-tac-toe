@@ -65,3 +65,8 @@ input {
   font-size: 72px;
   margin: auto;
 }
+
+.names {
+  font-size: 32px;
+  margin: 50px 10px;
+}
