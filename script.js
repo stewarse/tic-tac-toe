@@ -155,8 +155,10 @@ const Game = (() => {
 })(Gameboard);
 
 
-//[ ] : Update Start Button to restart if a game has already started
+//[ ] : Update Start Button to say restart if a game has already started
 //[ ] : Add a label to display the final result whether it ends in a win or a draw
-//[ ] : Computer AI? 
+//[ ] : Computer AI functionality
+//[ ] : Optional - Unbeatable AI
+//[ ] : Functionality that hides / shows Player 2 values when AI toggled on / off
 
 

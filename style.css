@@ -39,12 +39,9 @@ table td {
   justify-content: space-evenly;
 }
 
-#player-1-container {
-  display: flex;
-  align-items: center;
-}
-
-#player-2-container {
+#player-1-container,
+#player-2-container,
+#toggle-container {
   display: flex;
   align-items: center;
 }
@@ -69,4 +66,40 @@ input {
 .names {
   font-size: 32px;
   margin: 50px 10px;
+}
+
+.toggle {
+  position: relative;
+  display: flex;
+  width: 100px;
+  height: 52px;
+  background-color: red;
+  border-radius: 30px;
+  border: 2px solid gray;
+  font-size: 31px;
+  align-items: center;
+}
+
+.toggle:after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: gray;
+  top: 1px;
+  left: 1px;
+  transition: all 0.5s;
+}
+
+.checkbox:checked + .toggle::after {
+  left: 49px;
+}
+
+.checkbox:checked + .toggle {
+  background-color: green;
+}
+
+.checkbox {
+  display: none;
 }
