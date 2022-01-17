@@ -26,9 +26,14 @@ table td {
 }
 
 #start-btn {
-  position: absolute;
   bottom: 80px;
+}
+
+button {
+  position: absolute;
+  font-size: 24px;
   width: 100px;
+  height: 60px;
   left: 50%;
   transform: translate(-50px);
   font-size: 24px;
@@ -76,8 +81,9 @@ input {
   background-color: red;
   border-radius: 30px;
   border: 2px solid gray;
-  font-size: 31px;
+  font-size: 30px;
   align-items: center;
+  justify-content: space-around;
 }
 
 .toggle:after {
@@ -102,4 +108,29 @@ input {
 
 .checkbox {
   display: none;
+}
+
+#modal-background {
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+}
+
+.modal {
+  position: absolute;
+}
+
+#restart-btn {
+  top: 55%;
+}
+
+#winning-statement {
+  font-size: 3.76vw;
+  width: 50%;
+  left: 25%;
+  top: 35%;
+  background: rgba(255, 255, 255, 0.35);
 }

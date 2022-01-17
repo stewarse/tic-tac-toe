@@ -91,6 +91,7 @@ const Game = (() => {
     const player2Label = document.getElementById("player-2-label")
     const player1NameEntry = document.getElementById("player-1-name")
     const player2NameEntry = document.getElementById("player-2-name")
+    const modal = document.getElementById("modal-background")
  //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
 
@@ -156,7 +157,8 @@ const Game = (() => {
 
 
 //[ ] : Update Start Button to say restart if a game has already started
-//[ ] : Add a label to display the final result whether it ends in a win or a draw
+//[ ] : Check for Winner
+//[ ] : Announce Winner
 //[ ] : Computer AI functionality
 //[ ] : Optional - Unbeatable AI
 //[ ] : Functionality that hides / shows Player 2 values when AI toggled on / off
