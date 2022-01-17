@@ -180,6 +180,7 @@ const Game = (() => {
     board.addEventListener("click", _playerTurn) 
     start.addEventListener("click", _createPlayers)
     rematch.addEventListener("click", _setUpRematch)
+    modal.addEventListener("click", _hideModal)
 
     return { }
 
