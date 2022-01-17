@@ -1,4 +1,4 @@
-const Player = (name, playerMarker) => {
+const Player = (name, playerMarker = 'Computer') => {
     const _getPlayerMarker = () => playerMarker;
 
     const getName = () => name;
@@ -7,11 +7,19 @@ const Player = (name, playerMarker) => {
         Gameboard.addMoveToGameboard(index, _getPlayerMarker())
     }
 
+    const makeComputerMove = () => {
+        let compMoves = Gameboard.availableComputerMoves()
+        let random = Math.random() * compMoves.length
+        let compMoveIndex = compMoves[random]
+
+        Gameboard.addMoveToGameboard(compMoveIndex,_getPlayerMarker())
+    }
+
     const checkForWinner = () => {
         return Gameboard.checkWinConditions(_getPlayerMarker())
     }
 
-    return { makeMove, checkForWinner, getName }
+    return { makeMove, checkForWinner, getName , makeComputerMove }
 }
 
 const Gameboard = (() => {
@@ -20,10 +28,6 @@ const Gameboard = (() => {
 
     const winConditions = [[0, 1, 2], [3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8], [6, 4, 2]];
 
-    // const _cacheDOM =() => {
-    //     this.cell =  document.getElementById(`${i}-${j}`)
-    // }
-
     const _render = () => {
         gameboard.forEach((el, index) => {
             const cell = document.getElementById(`${index}`)
@@ -31,6 +35,13 @@ const Gameboard = (() => {
                 cell.textContent = el
             }
         })
+    }
+
+    const availableComputerMoves = () => {
+        const availableMoves = gameboard.map((el, index) => {
+            if (el === "") return index;
+        }).filter( (el) => el !== undefined)
+        return availableMoves
     }
 
     const addMoveToGameboard = (index, playerMarker) => {
@@ -83,7 +94,7 @@ const Gameboard = (() => {
 
 
 
-    return {addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard}
+    return {addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, availableComputerMoves}
 
     //Reset gameboard
 })();
@@ -93,6 +104,7 @@ const Gameboard = (() => {
 
 const Game = (() => {
     let turnCount = 0;
+    let AI = false 
     let player_0;
     let player_1;
 
@@ -106,8 +118,7 @@ const Game = (() => {
     const player2NameEntry = document.getElementById("player-2-name")
     const modal = document.getElementById("modal-background")
     const rematch = document.getElementById("rematch-btn")
- //update DOM based on gameboard? (needs access to gameboard?)
- //player clicks on gameboard
+    const winnerHeader = document.getElementById("winning-statement")
 
     // const _cacheDOM = () => {
     //     this.player1Label = document.getElementById("player-1-label")
@@ -119,24 +130,31 @@ const Game = (() => {
         let currentPlayer = eval(`player_${turnCount % 2}`)
 
         if (Gameboard.isValidMove(e, index) && turnCount < 9){
-            currentPlayer.makeMove(index)
-
+            if (AI === false){
+                currentPlayer.makeMove(index)
+            } else {
+                currentPlayer.makeComputerMove()
+            }
+            
             if (currentPlayer.checkForWinner()) {
-                _announceWinner(currentPlayer)
+                _announceWinner(currentPlayer.getName())
                 _displayModal()
                 return turnCount = 9
             } else if (!currentPlayer.checkForWinner() && turnCount === 8) {
                 _itsADraw()
+                _displayModal()
             }
             turnCount += 1
         }
     }
 
-    const _announceWinner = (currentPlayer) => {
-        console.log(`Winner Winner, Chicken Dinner. ${currentPlayer.getName()} has won the game!`)
+    const _announceWinner = (winningPlayer) => {
+        winnerHeader.textContent = `${winningPlayer} has won the game!`
+        console.log(`Winner Winner, Chicken Dinner. ${winningPlayer} has won the game!`)
     }
 
     const _itsADraw = () => {
+        winnerHeader.textContent = 'Nobody wins, it\'s a draw!'
         console.log('Nobody wins, it\'s a Draw')
     }
 
@@ -175,6 +193,10 @@ const Game = (() => {
 
     const _displayModal = () => {
         modal.style.visibility = "visible"
+    }
+
+    const _AIOpponent = () => {
+
     }
 
     board.addEventListener("click", _playerTurn) 
