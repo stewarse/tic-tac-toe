@@ -68,9 +68,22 @@ const Gameboard = (() => {
         return winner
     }
 
+    const resetGameboard = () => {
+        //Reset Gameboard array
+        // for (let i = 0; i < gameboard.length; i++){
+        //     gameboard[i] = ""
+        // }
+        gameboard.forEach((el, index) => {
+            gameboard[index] = ""
+        })
+        console.log(gameboard)
+        //Render Gameboard
+        _render();
+    }
 
 
-    return {addMoveToGameboard, isValidMove, checkWinConditions}
+
+    return {addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard}
 
     //Reset gameboard
 })();
@@ -92,6 +105,7 @@ const Game = (() => {
     const player1NameEntry = document.getElementById("player-1-name")
     const player2NameEntry = document.getElementById("player-2-name")
     const modal = document.getElementById("modal-background")
+    const rematch = document.getElementById("rematch-btn")
  //update DOM based on gameboard? (needs access to gameboard?)
  //player clicks on gameboard
 
@@ -109,6 +123,7 @@ const Game = (() => {
 
             if (currentPlayer.checkForWinner()) {
                 _announceWinner(currentPlayer)
+                _displayModal()
                 return turnCount = 9
             } else if (!currentPlayer.checkForWinner() && turnCount === 8) {
                 _itsADraw()
@@ -148,19 +163,34 @@ const Game = (() => {
         player2Label.hidden = false
     }
 
+    const _setUpRematch = () => {
+        _hideModal()
+        Gameboard.resetGameboard()
+        turnCount = 0;
+    }
+
+    const _hideModal = () => {
+        modal.style.visibility = "hidden"
+    }
+
+    const _displayModal = () => {
+        modal.style.visibility = "visible"
+    }
+
     board.addEventListener("click", _playerTurn) 
     start.addEventListener("click", _createPlayers)
+    rematch.addEventListener("click", _setUpRematch)
 
     return { }
 
 })(Gameboard);
 
 
-//[ ] : Update Start Button to say restart if a game has already started
-//[ ] : Check for Winner
-//[ ] : Announce Winner
+//[x] : Add Rematch Functionality to Modal
+//[x] : Check for Winner
+//[x] : Announce Winner
+//[ ] : Functionality that hides / shows Player 2 values when AI toggled on / off
 //[ ] : Computer AI functionality
 //[ ] : Optional - Unbeatable AI
-//[ ] : Functionality that hides / shows Player 2 values when AI toggled on / off
 
 

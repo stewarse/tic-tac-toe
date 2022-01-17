@@ -31,12 +31,11 @@ table td {
 
 button {
   position: absolute;
-  font-size: 24px;
   width: 100px;
   height: 60px;
   left: 50%;
   transform: translate(-50px);
-  font-size: 24px;
+  font-size: 20px;
 }
 
 #name-container {
@@ -111,7 +110,7 @@ input {
 }
 
 #modal-background {
-  display: none;
+  visibility: hidden;
   top: 0;
   left: 0;
   width: 100%;
@@ -123,7 +122,7 @@ input {
   position: absolute;
 }
 
-#restart-btn {
+#rematch-btn {
   top: 55%;
 }
 
