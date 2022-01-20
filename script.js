@@ -9,7 +9,7 @@ const Player = (name = "Computer", playerMarker) => {
 
     const makeComputerMove = () => {
         let compMoves = Gameboard.availableComputerMoves()
-        let random = Math.random() * compMoves.length
+        let random = Math.floor(Math.random() * compMoves.length)
         let compMoveIndex = compMoves[random]
 
         Gameboard.addMoveToGameboard(compMoveIndex,_getPlayerMarker())
@@ -19,7 +19,7 @@ const Player = (name = "Computer", playerMarker) => {
         return Gameboard.checkWinConditions(_getPlayerMarker())
     }
 
-    return { makeMove, checkForWinner, getName , makeComputerMove }
+    return { makeMove, checkForWinner, getName, makeComputerMove }
 }
 
 const Gameboard = (() => {
@@ -95,8 +95,6 @@ const Gameboard = (() => {
 
 
     return {addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, availableComputerMoves}
-
-    //Reset gameboard
 })();
 
 
@@ -134,18 +132,26 @@ const Game = (() => {
             if (AI === false){
                 currentPlayer.makeMove(index)
             } else {
-                currentPlayer.makeComputerMove()
-            }
-            
-            if (currentPlayer.checkForWinner()) {
-                _announceWinner(currentPlayer.getName())
-                _displayModal()
-                return turnCount = 9
-            } else if (!currentPlayer.checkForWinner() && turnCount === 8) {
-                _itsADraw()
-                _displayModal()
+                player_0.makeMove(index)
+                if(!_checkForWinner(player_0)) {
+                    player_1.makeComputerMove()
+                    _checkForWinner(player_1)
+                    turnCount += 1
+                }
             }
             turnCount += 1
+            console.log(turnCount)
+        }
+    }
+
+    const _checkForWinner = (currentPlayer) => {
+        if (currentPlayer.checkForWinner()) {
+            _announceWinner(currentPlayer.getName())
+            _displayModal()
+            return turnCount = 9
+        } else if (!currentPlayer.checkForWinner() && turnCount === 8) {
+            _itsADraw()
+            _displayModal()
         }
     }
 
