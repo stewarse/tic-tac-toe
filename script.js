@@ -8,9 +8,9 @@ const Player = (name = "Computer", playerMarker) => {
     }
 
     const makeComputerMove = () => {
-        let compMoves = Gameboard.availableComputerMoves()
-        let random = Math.floor(Math.random() * compMoves.length)
-        let compMoveIndex = compMoves[random]
+        let availableMoves = Gameboard.availableComputerMoves()
+        let randomNum = Math.floor(Math.random() * availableMoves.length)
+        let compMoveIndex = availableMoves[randomNum]
 
         Gameboard.addMoveToGameboard(compMoveIndex,_getPlayerMarker())
     }
@@ -24,24 +24,23 @@ const Player = (name = "Computer", playerMarker) => {
 
 const Gameboard = (() => {
 
-    const gameboard = ['', '', '', '', '', '', '', '', ''];
+    const gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     const winConditions = [[0, 1, 2], [3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8], [6, 4, 2]];
 
     const _render = () => {
         gameboard.forEach((el, index) => {
             const cell = document.getElementById(`${index}`)
-            if (cell) {
+            if (cell && (el === "X" || el === "O")) {
                 cell.textContent = el
+            } else {
+                cell.textContent = ""
             }
         })
     }
 
     const availableComputerMoves = () => {
-        const availableMoves = gameboard.map((el, index) => {
-            if (el === "") return index;
-        }).filter( (el) => el !== undefined)
-        return availableMoves
+        return gameboard.filter( el => el !== "X" && el !== "O" )
     }
 
     const addMoveToGameboard = (index, playerMarker) => {
@@ -56,7 +55,7 @@ const Gameboard = (() => {
         if(_isBoardCellClicked(e)){
             //Verify that the gameboard at index is === ""
             //Return True or False
-            return gameboard[index] === "" ? true : false;
+            return gameboard.indexOf(index) !== -1 ? true : false;
         }
         return false
     }
@@ -85,7 +84,7 @@ const Gameboard = (() => {
         //     gameboard[i] = ""
         // }
         gameboard.forEach((el, index) => {
-            gameboard[index] = ""
+            gameboard[index] = index
         })
         console.log(gameboard)
         //Render Gameboard
