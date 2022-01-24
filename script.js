@@ -2,17 +2,18 @@ const Player = (name = "Computer", playerMarker) => {
     const _getPlayerMarker = () => playerMarker;
 
     const getName = () => name;
-    
+
     const makeMove = (index) => {
         Gameboard.addMoveToGameboard(index, _getPlayerMarker())
     }
 
     const makeComputerMove = () => {
-        let availableMoves = Gameboard.availableComputerMoves()
-        let randomNum = Math.floor(Math.random() * availableMoves.length)
-        let compMoveIndex = availableMoves[randomNum]
+        // let availableMoves = Gameboard.availableComputerMoves()
+        // let randomNum = Math.floor(Math.random() * availableMoves.length)
+        // let compMoveIndex = availableMoves[randomNum]
+        let compMoveIndex = Gameboard.findBestMove()
 
-        Gameboard.addMoveToGameboard(compMoveIndex,_getPlayerMarker())
+        Gameboard.addMoveToGameboard(compMoveIndex, _getPlayerMarker())
     }
 
     const checkForWinner = () => {
@@ -26,7 +27,7 @@ const Gameboard = (() => {
 
     const gameboard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-    const winConditions = [[0, 1, 2], [3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8], [6, 4, 2]];
+    const winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]];
 
     const _render = () => {
         gameboard.forEach((el, index) => {
@@ -40,20 +41,111 @@ const Gameboard = (() => {
     }
 
     const availableComputerMoves = () => {
-        return gameboard.filter( el => el !== "X" && el !== "O" )
+        return gameboard.filter(el => el !== "X" && el !== "O")
+    }
+
+    const _evaluate = (gameboard, winningConditions) => {
+        let score = 0
+        winningConditions.forEach((el) => {
+            if (
+                gameboard[el[0]] === gameboard[el[1]] &&
+                gameboard[el[1]] === gameboard[el[2]]
+            ) {
+                if (gameboard[el[0]] === "O")   { 
+                    score = 10
+                } else if (gameboard[el[0]] === "X")  {
+                    score = -10
+                }
+
+            }
+        })
+        return score
+    }
+
+    const findBestMove = () => {
+        let bestVal = -Infinity;
+        let bestMove = -1
+
+        gameboard.forEach((el, index) => {
+            if (typeof el === "number") {
+                gameboard[index] = "O";
+                let moveVal = _minimax(0, false)
+                gameboard[index] = index
+
+                if (moveVal > bestVal) {
+                    bestMove = index
+                    bestVal = moveVal
+                }
+            }
+        })
+        return bestMove
+    }
+
+    const _minimax = (depth, isMaximizingPlayer) => {
+
+        let score = _evaluate(gameboard, winConditions)
+        if (score === 10) {
+            return score - depth;
+        }
+
+        if (score === -10) {
+            return score + depth;
+        }
+
+        if (!_isMovesLeft()) {
+            return 0;
+        }
+
+        if (isMaximizingPlayer) {
+            best = -Infinity
+            gameboard.forEach((el, index) => {
+                if (typeof el === "number") {
+                    gameboard[index] = "O"
+                    best = Math.max(best, _minimax( depth + 1, !isMaximizingPlayer))
+                    gameboard[index] = index
+                }
+            })
+            return best
+
+        } else {
+            best = Infinity
+            gameboard.forEach((el, index) => {
+                if (typeof el === "number") {
+                    gameboard[index] = "X"
+                    best = Math.min(best, _minimax( depth + 1, !isMaximizingPlayer))
+                    gameboard[index] = index
+                }
+            })
+            return best
+        }
+    }
+
+
+    const _isMovesLeft = () => {
+        let movesRemaining = false
+        
+        gameboard.every((el) => {
+            if (el !== "X" && el !== "O") {
+                movesRemaining = true 
+                return false
+            } else {
+                return true
+            }
+        })
+        return movesRemaining
     }
 
     const addMoveToGameboard = (index, playerMarker) => {
-            //Add move to gameboard
-            gameboard[index] = playerMarker
-            //Render board
-                _render()
+        //Add move to gameboard
+        gameboard[index] = playerMarker
+        //Render board
+        _render()
     }
 
     const isValidMove = (e, index) => {
         //Verify that the click occurred on a valid cell
-        if(_isBoardCellClicked(e)){
-            //Verify that the gameboard at index is === ""
+        if (_isBoardCellClicked(e)) {
+            //Verify that the gameboard at index is a number
             //Return True or False
             return gameboard.indexOf(index) !== -1 ? true : false;
         }
@@ -67,22 +159,19 @@ const Gameboard = (() => {
     const checkWinConditions = (playerMarker) => {
         let winner = false
         winConditions.forEach((el) => {
-            if  (
-                gameboard[el[0]] === playerMarker && 
-                gameboard[el[1]] === playerMarker && 
+            if (
+                gameboard[el[0]] === playerMarker &&
+                gameboard[el[1]] === playerMarker &&
                 gameboard[el[2]] === playerMarker
-                ) {
-                return winner = true 
-            } 
+            ) {
+                return winner = true
+            }
         })
         return winner
     }
 
     const resetGameboard = () => {
         //Reset Gameboard array
-        // for (let i = 0; i < gameboard.length; i++){
-        //     gameboard[i] = ""
-        // }
         gameboard.forEach((el, index) => {
             gameboard[index] = index
         })
@@ -93,7 +182,7 @@ const Gameboard = (() => {
 
 
 
-    return {addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, availableComputerMoves}
+    return { addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, findBestMove, availableComputerMoves }
 })();
 
 
@@ -101,7 +190,7 @@ const Gameboard = (() => {
 
 const Game = (() => {
     let turnCount = 0;
-    let AI = false 
+    let AI = false
     let player_0;
     let player_1;
 
@@ -127,19 +216,18 @@ const Game = (() => {
         let index = +e.target.id
         let currentPlayer = eval(`player_${turnCount % 2}`)
 
-        if (Gameboard.isValidMove(e, index) && turnCount < 9){
-            if (AI === false){
+        if (Gameboard.isValidMove(e, index) && turnCount < 9) {
+            if (AI === false) {
                 currentPlayer.makeMove(index)
             } else {
                 player_0.makeMove(index)
-                if(!_checkForWinner(player_0)) {
+                if (!_checkForWinner(player_0)) {
                     player_1.makeComputerMove()
                     _checkForWinner(player_1)
                     turnCount += 1
                 }
             }
             turnCount += 1
-            console.log(turnCount)
         }
     }
 
@@ -170,7 +258,7 @@ const Game = (() => {
         _setPlayerNames()
         _disableAIToggle()
     }
-    
+
     const _setPlayerNames = () => {
         player1Name.textContent = player_0.getName()
         player2Name.textContent = player_1.getName()
@@ -182,7 +270,7 @@ const Game = (() => {
         checkbox.setAttribute("disabled", "")
     }
 
-    const _hidePlayerEntry= () => {
+    const _hidePlayerEntry = () => {
         player1NameInput.hidden = true
         player2NameInput.hidden = true
     }
@@ -210,11 +298,10 @@ const Game = (() => {
         if (checkbox.checked) {
             AI = true;
             _disablePlayer2();
-        } else{
+        } else {
             AI = false;
             _enablePlayer2();
         }
-        console.log(AI)
     }
 
     const _disablePlayer2 = () => {
@@ -229,17 +316,13 @@ const Game = (() => {
         player2NameInput.value = ""
     }
 
-    const _AIOpponent = () => {
-
-    }
-
-    board.addEventListener("click", _playerTurn) 
+    board.addEventListener("click", _playerTurn)
     start.addEventListener("click", _createPlayers)
     rematch.addEventListener("click", _setUpRematch)
     modal.addEventListener("click", _hideModal)
     checkbox.addEventListener("change", _toggleAI)
 
-    return { }
+    return {}
 
 })(Gameboard);
 
@@ -247,8 +330,8 @@ const Game = (() => {
 //[x] : Add Rematch Functionality to Modal
 //[x] : Check for Winner
 //[x] : Announce Winner
-//[ ] : Functionality that hides / shows Player 2 values when AI toggled on / off
-//[ ] : Computer AI functionality
-//[ ] : Optional - Unbeatable AI
+//[x] : Functionality that hides / shows Player 2 values when AI toggled on / off
+//[x] : Computer AI functionality
+//[x] : Optional - Unbeatable AI
 
 
