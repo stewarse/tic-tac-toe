@@ -313,4 +313,9 @@ const Game = (() => {
 })(Gameboard);
 
 
-
+//[x] : Add Rematch Functionality to Modal
+//[x] : Check for Winner
+//[x] : Announce Winner
+//[x] : Functionality that hides / shows Player 2 values when AI toggled on / off
+//[x] : Computer AI functionality
+//[x] : Optional - Unbeatable AI
