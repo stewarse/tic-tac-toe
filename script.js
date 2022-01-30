@@ -8,9 +8,11 @@ const Player = (name = "Computer", playerMarker) => {
     }
 
     const makeComputerMove = () => {
-        // let availableMoves = Gameboard.availableComputerMoves()
-        // let randomNum = Math.floor(Math.random() * availableMoves.length)
-        // let compMoveIndex = availableMoves[randomNum]
+        /* Code to make random guesses - Could be used to make an "Easy" AI
+        ** let availableMoves = Gameboard.availableComputerMoves()
+        ** let randomNum = Math.floor(Math.random() * availableMoves.length)
+        ** let compMoveIndex = availableMoves[randomNum]
+        */
         let compMoveIndex = Gameboard.findBestMove()
 
         Gameboard.addMoveToGameboard(compMoveIndex, _getPlayerMarker())
@@ -39,11 +41,11 @@ const Gameboard = (() => {
             }
         })
     }
-
-    const availableComputerMoves = () => {
-        return gameboard.filter(el => el !== "X" && el !== "O")
-    }
-
+/* Used for determining random moves
+**    const availableComputerMoves = () => {
+**        return gameboard.filter(el => el !== "X" && el !== "O")
+**    }
+*/
     const _evaluate = (gameboard, winningConditions) => {
         let score = 0
         winningConditions.forEach((el) => {
@@ -120,7 +122,6 @@ const Gameboard = (() => {
         }
     }
 
-
     const _isMovesLeft = () => {
         let movesRemaining = false
         
@@ -136,17 +137,13 @@ const Gameboard = (() => {
     }
 
     const addMoveToGameboard = (index, playerMarker) => {
-        //Add move to gameboard
         gameboard[index] = playerMarker
-        //Render board
         _render()
     }
 
     const isValidMove = (e, index) => {
-        //Verify that the click occurred on a valid cell
+        //Verify that the click occurred on a open cell
         if (_isBoardCellClicked(e)) {
-            //Verify that the gameboard at index is a number
-            //Return True or False
             return gameboard.indexOf(index) !== -1 ? true : false;
         }
         return false
@@ -171,21 +168,16 @@ const Gameboard = (() => {
     }
 
     const resetGameboard = () => {
-        //Reset Gameboard array
         gameboard.forEach((el, index) => {
             gameboard[index] = index
         })
         console.log(gameboard)
-        //Render Gameboard
         _render();
     }
 
+    return { addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, findBestMove }
 
-
-    return { addMoveToGameboard, isValidMove, checkWinConditions, resetGameboard, findBestMove, availableComputerMoves }
 })();
-
-
 
 
 const Game = (() => {
@@ -196,7 +188,6 @@ const Game = (() => {
 
     const board = document.getElementById("board")
     const start = document.getElementById("start-btn")
-    // const player1Label = document.getElementById("player-1-label")
     const player2Label = document.getElementById("player-2-label")
     const player1Name = document.getElementById("player-1-name")
     const player2Name = document.getElementById("player-2-name")
@@ -206,11 +197,6 @@ const Game = (() => {
     const rematch = document.getElementById("rematch-btn")
     const winnerHeader = document.getElementById("winning-statement")
     const checkbox = document.getElementById("switch")
-
-    // const _cacheDOM = () => {
-    //     this.player1Label = document.getElementById("player-1-label")
-    //     const player2Label = document.getElementById("player-2-label")
-    // }
 
     const _playerTurn = (e) => {
         let index = +e.target.id
@@ -322,16 +308,9 @@ const Game = (() => {
     modal.addEventListener("click", _hideModal)
     checkbox.addEventListener("change", _toggleAI)
 
-    return {}
+    return { }
 
 })(Gameboard);
 
-
-//[x] : Add Rematch Functionality to Modal
-//[x] : Check for Winner
-//[x] : Announce Winner
-//[x] : Functionality that hides / shows Player 2 values when AI toggled on / off
-//[x] : Computer AI functionality
-//[x] : Optional - Unbeatable AI
 
 
